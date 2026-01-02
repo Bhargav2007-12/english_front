@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
-const WS_URL = 'ws://localhost:8000/ws'
+const WS_URL = 'wss://english-back-5nst.onrender.com/ws'
 
 function App() {
   const [isConnected, setIsConnected] = useState(false)
@@ -37,6 +37,8 @@ function App() {
   const connect = async () => {
     try {
       setError(null)
+      console.log('Attempting to connect to:', WS_URL)
+      addMessage('system', `Connecting to: ${WS_URL}`)
       const ws = new WebSocket(WS_URL)
       
       ws.onopen = () => {
@@ -128,14 +130,15 @@ function App() {
       
       ws.onerror = (err) => {
         console.error('WebSocket error:', err)
-        setError('WebSocket connection error')
+        console.error('Failed to connect to:', WS_URL)
+        setError(`WebSocket connection error. Check if backend is running at: ${WS_URL}`)
         setIsConnected(false)
       }
       
-      ws.onclose = () => {
-        console.log('Disconnected from backend')
+      ws.onclose = (event) => {
+        console.log('Disconnected from backend. Code:', event.code, 'Reason:', event.reason)
         setIsConnected(false)
-        addMessage('system', 'Disconnected from server')
+        addMessage('system', `Disconnected from server (Code: ${event.code})`)
       }
       
       wsRef.current = ws

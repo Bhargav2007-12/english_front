@@ -21,7 +21,24 @@ React application that captures audio from the user's microphone and streams it 
 npm install
 ```
 
-2. **Start the development server:**
+2. **Configure environment variables:**
+
+Copy the example environment file:
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and set your backend WebSocket URL:
+```env
+VITE_WS_URL=ws://localhost:8000/ws
+```
+
+For production (Vercel), use secure WebSocket:
+```env
+VITE_WS_URL=wss://your-backend-domain.com/ws
+```
+
+3. **Start the development server:**
 ```bash
 npm run dev
 ```
@@ -105,4 +122,26 @@ Built with:
 - Ensure you're speaking clearly
 - Check microphone input levels
 - Verify backend has valid OpenAI API key
+
+## Deployment to Vercel
+
+1. **Push your code to GitHub** (if not already done)
+
+2. **Import project to Vercel:**
+   - Go to [Vercel](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Configure build settings (Vite is auto-detected)
+
+3. **Set environment variables in Vercel:**
+   - Go to Project Settings → Environment Variables
+   - Add: `VITE_WS_URL` = `wss://your-backend-domain.com/ws`
+   - **Important:** Use `wss://` (secure) instead of `ws://`
+   - Replace `your-backend-domain.com` with your actual backend URL
+
+4. **Deploy:**
+   - Click "Deploy"
+   - Vercel will build and deploy your app automatically
+
+**Note:** Make sure your backend supports secure WebSocket connections (`wss://`) and has proper CORS configuration for your Vercel domain.
 
